@@ -1,0 +1,9 @@
+set show-all-if-ambiguous on
+set show-all-if-unmodified on
+set menu-complete-display-prefix on
+"\t": menu-complete
+"\e[Z": menu-complete-backward
+set colored-completion-prefix on
+set colored-stats on
+"\C-h": "\eb\C-u\ef\C-k\C-aman \n"
+"\C-o": "cd -\n"

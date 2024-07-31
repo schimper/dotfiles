@@ -1,0 +1,17 @@
+Xft.autohint: 0
+Xft.lcdfilter: lcddefault
+Xft.hintstyle: hintslight
+Xft.hinting: 1
+Xft.rgba: rgb
+Xft.dpi: 96
+URxvt.letterSpace: -1
+URxvt*skipBuiltinGlyphs: true
+Xft.antialias: true
+URxvt*scrollBar: false
+URxvt*font: xft:Iosevka:size=14,xft:Source\ Code\ Pro\ for\ Powerline:size=11,xft:DejaVu\ Sans\ Mono\ for\ Powerline:size=11
+
+URxvt.depth:                32
+URxvt.geometry:             90x30
+URxvt.loginShell:           true
+URxvt.internalBorder:       25
+URxvt.lineSpace: 0
