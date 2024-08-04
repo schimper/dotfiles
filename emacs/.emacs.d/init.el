@@ -247,6 +247,162 @@
   :straight t
   :config
   (setq ob-mermaid-cli-path "/home/thomas/.local/bin/mmdc"))
+
+;; pdf-tools
+(use-package pdf-tools
+  :straight t
+  :init
+  (pdf-tools-install :no-query)
+  (add-hook 'pdf-view-mode-hook (lambda ()
+                                  (progn
+                                    (pdf-view-themed-minor-mode)
+                                    (pdf-view-fit-page-to-window)))))
+;; htmlize
+(use-package htmlize
+  :straight t)
+;; diminish
+(use-package diminish
+  :straight t)
+;; which-key
+(use-package which-key
+  :straight t
+  :diminish which-key-mode
+  :init
+  (which-key-mode))
+;; swiper search
+(use-package swiper
+  :straight t
+  :bind ("C-s" . 'swiper))
+;; beacon
+(use-package beacon
+  :straight t
+  :diminish beacon-mode
+  :init
+  (beacon-mode 1))
+;; avy
+(use-package avy
+  :straight t
+  :bind
+  ("M-s" . avy-goto-char))
+;; marginalia
+(use-package marginalia
+  :straight t
+  :init
+  (marginalia-mode))
+;; vertico
+(use-package vertico
+  :straight t
+  :init
+  (vertico-mode)
+
+  ;; Different scroll margin
+  ;; (setq vertico-scroll-margin 0)
+
+  ;; Grow and shrink the Vertico minibuffer
+  (setq vertico-resize t)
+
+  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+  (setq vertico-cycle t))
+
+;; Persist history over Emacs restarts. Vertico sorts by history position.
+(savehist-mode +1)
+;; Configure directory extension.
+(use-package vertico-directory
+  :after vertico
+  :straight nil
+  :straight nil
+  ;; More convenient directory navigation commands
+  :bind (:map vertico-map
+              ("RET" . vertico-directory-enter)
+              ("DEL" . vertico-directory-delete-char)
+              ("M-DEL" . vertico-directory-delete-word))
+  ;; Tidy shadowed file names
+  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
+;;orderless
+(use-package orderless
+  :straight t
+  :custom
+  ;; Configure a custom style dispatcher (see the Consult wiki)
+  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
+  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
+  (completion-styles '(orderless basic))
+  (completion-category-defaults nil)
+  (completion-category-overrides '((file (styles partial-completion)))))
+;; set completion style
+(setq completion-styles '(substring orderless basic)
+	  read-file-name-completion-ignore-case t
+      read-buffer-completion-ignore-case t
+      completion-ignore-case t)
+;; async
+(use-package async
+  :straight t
+  :init
+  (dired-async-mode 1))
+;; magit
+(use-package magit
+  :bind (("C-c m" . magit-status))
+  :straight t)
+;; code
+(use-package company
+  :straight t
+  :diminish (meghanada-mode company-mode irony-mode)
+  :config
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 3)
+  (define-key company-active-map (kbd "M-n") nil)
+  (define-key company-active-map (kbd "M-p") nil)
+  (define-key company-active-map (kbd "C-n") #'company-select-next)
+  (define-key company-active-map (kbd "C-p") #'company-select-previous)
+  (define-key company-active-map (kbd "SPC") #'company-abort)
+  :hook
+  ((java-mode c-mode c++-mode) . company-mode))
+;; snippets
+(use-package yasnippet
+  :straight t
+  :diminish yas-minor-mode
+  :hook
+  ((c-mode c++-mode) . yas-minor-mode)
+  :config
+  (yas-reload-all))
+(use-package yasnippet-snippets
+  :straight t)
+;; lsp integration
+(use-package lsp-bridge ;;pip3 install epc orjson sexpdata six setuptools paramiko rapidfuzz
+  :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
+						 :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
+						 :build (:not compile))
+  :init
+  (global-lsp-bridge-mode))
+;; projectile
+(use-package projectile
+  :diminish projectile-mode
+  :straight t
+  :init
+  (projectile-mode +1)
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+  (setq projectile-project-search-path '("~/Documents/studium" "~/.dotfiles")))
+;; rainbow delim
+(use-package rainbow-delimiters
+  :straight t
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+;; aggressive indent
+(use-package aggressive-indent
+  :hook ((c-mode . aggressive-indent-mode)
+         (c++-mode . aggressive-indent-mode)
+         (java-mode . aggressive-indent-mode)
+		 (elisp-mode . aggressive-indent-mode))
+  :config
+  (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
+(use-package edit-indirect
+  :straight t)
+;; racket
+(use-package racket-mode
+  :straight t)
+(use-package ob-racket
+  :ensure t
+  :straight (:type git :host github :repo "hasu/emacs-ob-racket"))
+
 ;; Org-Mode
 (use-package org
   :straight nil
@@ -320,7 +476,8 @@
    (shell . t)
    (sql . nil)
    (sqlite . t)
-   (mermaid . t)))
+   (mermaid . t)
+   (racket . t)))
 (setq
  org-latex-logfiles-extensions (quote ("lof"
                                        "lot"
@@ -770,156 +927,9 @@
                                "\\vspace{10pt}\n"
                                "{\\normalsize\\itshape %s \\par}\n"
                                "{\\normalsize\\scshape %a \\par}\n"
-                               "\\vfill\n"
+                               "\\vspace*{\\fill}\n"
+							   "\\includesvg{img/siegel.svg}\\par\n"
+							   "\\vspace*{\\fill}\n"
                                "{\\normalsize %D \\par}\n"
                                "\\clearpage\n"
                                "}"))
-
-;; pdf-tools
-(use-package pdf-tools
-  :straight t
-  :init
-  (pdf-tools-install :no-query)
-  (add-hook 'pdf-view-mode-hook (lambda ()
-                                  (progn
-                                    (pdf-view-midnight-minor-mode)
-                                    (pdf-view-fit-page-to-window)))))
-;; htmlize
-(use-package htmlize
-  :straight t)
-;; diminish
-(use-package diminish
-  :straight t)
-;; which-key
-(use-package which-key
-  :straight t
-  :diminish which-key-mode
-  :init
-  (which-key-mode))
-;; swiper search
-(use-package swiper
-  :straight t
-  :bind ("C-s" . 'swiper))
-;; beacon
-(use-package beacon
-  :straight t
-  :diminish beacon-mode
-  :init
-  (beacon-mode 1))
-;; avy
-(use-package avy
-  :straight t
-  :bind
-  ("M-s" . avy-goto-char))
-;; marginalia
-(use-package marginalia
-  :straight t
-  :init
-  (marginalia-mode))
-;; vertico
-(use-package vertico
-  :straight t
-  :init
-  (vertico-mode)
-
-  ;; Different scroll margin
-  ;; (setq vertico-scroll-margin 0)
-
-  ;; Grow and shrink the Vertico minibuffer
-  (setq vertico-resize t)
-
-  ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
-  (setq vertico-cycle t))
-
-;; Persist history over Emacs restarts. Vertico sorts by history position.
-(savehist-mode +1)
-;; Configure directory extension.
-(use-package vertico-directory
-  :after vertico
-  :straight nil
-  :straight nil
-  ;; More convenient directory navigation commands
-  :bind (:map vertico-map
-              ("RET" . vertico-directory-enter)
-              ("DEL" . vertico-directory-delete-char)
-              ("M-DEL" . vertico-directory-delete-word))
-  ;; Tidy shadowed file names
-  :hook (rfn-eshadow-update-overlay . vertico-directory-tidy))
-;;orderless
-(use-package orderless
-  :straight t
-  :custom
-  ;; Configure a custom style dispatcher (see the Consult wiki)
-  ;; (orderless-style-dispatchers '(+orderless-consult-dispatch orderless-affix-dispatch))
-  ;; (orderless-component-separator #'orderless-escapable-split-on-space)
-  (completion-styles '(orderless basic))
-  (completion-category-defaults nil)
-  (completion-category-overrides '((file (styles partial-completion)))))
-;; set completion style
-(setq completion-styles '(substring orderless basic)
-	  read-file-name-completion-ignore-case t
-      read-buffer-completion-ignore-case t
-      completion-ignore-case t)
-;; async
-(use-package async
-  :straight t
-  :init
-  (dired-async-mode 1))
-;; magit
-(use-package magit
-  :bind (("C-c m" . magit-status))
-  :straight t)
-;; code
-(use-package company
-  :straight t
-  :diminish (meghanada-mode company-mode irony-mode)
-  :config
-  (setq company-idle-delay 0)
-  (setq company-minimum-prefix-length 3)
-  (define-key company-active-map (kbd "M-n") nil)
-  (define-key company-active-map (kbd "M-p") nil)
-  (define-key company-active-map (kbd "C-n") #'company-select-next)
-  (define-key company-active-map (kbd "C-p") #'company-select-previous)
-  (define-key company-active-map (kbd "SPC") #'company-abort)
-  :hook
-  ((java-mode c-mode c++-mode) . company-mode))
-;; snippets
-(use-package yasnippet
-  :straight t
-  :diminish yas-minor-mode
-  :hook
-  ((c-mode c++-mode) . yas-minor-mode)
-  :config
-  (yas-reload-all))
-(use-package yasnippet-snippets
-  :straight t)
-;; lsp integration
-(use-package lsp-bridge ;;pip3 install epc orjson sexpdata six setuptools paramiko rapidfuzz
-  :straight '(lsp-bridge :type git :host github :repo "manateelazycat/lsp-bridge"
-						 :files (:defaults "*.el" "*.py" "acm" "core" "langserver" "multiserver" "resources")
-						 :build (:not compile))
-  :init
-  (global-lsp-bridge-mode))
-;; projectile
-(use-package projectile
-  :diminish projectile-mode
-  :straight t
-  :init
-  (projectile-mode +1)
-  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
-  (setq projectile-project-search-path '("~/Documents/")))
-;; rainbow delim
-(use-package rainbow-delimiters
-  :straight t
-  :hook
-  (prog-mode . rainbow-delimiters-mode))
-;; aggressive indent
-(use-package aggressive-indent
-  :hook ((c-mode . aggressive-indent-mode)
-         (c++-mode . aggressive-indent-mode)
-         (java-mode . aggressive-indent-mode)
-		 (elisp-mode . aggressive-indent-mode))
-  :config
-  (add-to-list 'aggressive-indent-excluded-modes 'python-mode))
-(use-package edit-indirect
-  :straight t)
