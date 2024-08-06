@@ -596,7 +596,8 @@
 (add-to-list 'org-latex-packages-alist '("" "booktabs"))
 (setq org-latex-listings 'minted
       org-latex-minted-options '(("fontsize" "\\normalsize")("frame" "lines")
-                                 ("bgcolor=white"))
+                                 ("bgcolor=white")
+								 ("style=tango"))
       org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 (require 'ox-latex)
 (add-to-list 'org-latex-classes
@@ -923,13 +924,35 @@
 (setq org-latex-title-command (concat
                                "\\thispagestyle{empty}\n"
                                "{\\centering\n"
-                               "{\\Huge %t \\par }\n"
-                               "\\vspace{10pt}\n"
-                               "{\\normalsize\\itshape %s \\par}\n"
-                               "{\\normalsize\\scshape %a \\par}\n"
+                               "{\\Huge\\scshape %t \\par }\n"
+                               "\\vspace{30pt}\n"
+							   "{\\LARGE\\scshape Masterthesis\\par}\n"
+							   "\\vspace{10pt}\n"
+							   "{\\large\\itshape  In order to obtain the academic degree\\par}\n"
+							   "{\\large\\scshape Master of Science (M.Sc.)\\par}\n"
+                               "{\\large\\itshape %s \\par}\n"
                                "\\vspace*{\\fill}\n"
 							   "\\includesvg{img/siegel.svg}\\par\n"
 							   "\\vspace*{\\fill}\n"
-                               "{\\normalsize %D \\par}\n"
+							   "{\\normalsize University of Trier\\par\n}"
+							   "{\\normalsize FB IV - Computer Science\\par\n}"
+							   "{\\normalsize Chair for Databases and Information Systems\\par\n}"
+							   "\\vspace{50pt}\n"
+							   "{\\begin{table}[H]
+\\centering
+\\begin{tabular}{lllll}
+Reviewer & \\textsc{Prof. Dr.-Ing. Ralf Schenkel}   &  &  &  \\\\
+         & \\textsc{Prof. Dr.-Ing. Benjamin Weyers} &  &  &  \\\\
+Advisor  & \\textsc{M. Sc. Tobias Zeimetz}          &  &  &  \\\\
+         &                                &  &  &
+\\end{tabular}
+\\end{table}}\n"
+                               "{\\normalsize Submitted on  %D\;  by: \\par}\n"
+							   "\\vspace{20pt}\n"
+							   "{\\normalsize \\scshape %a\\par}\n"
+							   "{\\normalsize Hohenzollernstraße 32 \\par}\n"
+							   "{\\normalsize 54290 Trier\\par}\n"
+							   "{\\normalsize s4tsschi@uni-trier.de \\par}\n"
+							   "{\\normalsize Matr.-Nr. 1184921\\par}\n"
                                "\\clearpage\n"
                                "}"))
