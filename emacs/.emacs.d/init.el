@@ -96,7 +96,7 @@
         dashboard-center-content t
         dashboard-startup-banner "~/.emacs.d/logo/gnuc.svg"
         dashboard-banner-logo-title "I want to be a stronger, kinder person"
-  initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))))
+		initial-buffer-choice (lambda () (get-buffer-create dashboard-buffer-name))))
 ;; fonts
 (add-to-list 'default-frame-alist
              '(font . "Iosevka-15"))
@@ -521,8 +521,7 @@
 			(lambda ()
               (local-set-key (kbd "M-]") 'org-ref-insert-link))
 			(setq bibtex-completion-bibliography
-				  '("~/Documents/pyspark_rdf_fca/text/bibliography.bib"))))
-
+				  '("~/Documents/studium/MA/pyspark_rdf_fca/text/bibliography.bib"))))
 (use-package cdlatex
   :after org
   :init
@@ -595,9 +594,13 @@
 (add-to-list 'org-latex-packages-alist '("dvipsnames" "xcolor"))
 (add-to-list 'org-latex-packages-alist '("" "booktabs"))
 (setq org-latex-listings 'minted
-      org-latex-minted-options '(("fontsize" "\\normalsize")("frame" "lines")
+      org-latex-minted-options '(("fontsize" "\\footnotesize")
+								 ("frame" "lines")
                                  ("bgcolor=white")
-								 ("style=tango"))
+								 ("framesep=2mm")
+								 ("baselinestretch=1.2")
+								 ("style=xcode")
+								 ("linenos"))
       org-latex-pdf-process (list "latexmk -shell-escape -bibtex -f -pdf %f"))
 (require 'ox-latex)
 (add-to-list 'org-latex-classes
@@ -937,8 +940,9 @@
 							   "{\\normalsize University of Trier\\par\n}"
 							   "{\\normalsize FB IV - Computer Science\\par\n}"
 							   "{\\normalsize Chair for Databases and Information Systems\\par\n}"
-							   "\\vspace{50pt}\n"
-							   "{\\begin{table}[H]
+							   "\\vspace{10pt}\n"
+							   "\\begin{center}\n"
+							   "\\begin{table}[H]
 \\centering
 \\begin{tabular}{lllll}
 Reviewer & \\textsc{Prof. Dr.-Ing. Ralf Schenkel}   &  &  &  \\\\
@@ -946,7 +950,8 @@ Reviewer & \\textsc{Prof. Dr.-Ing. Ralf Schenkel}   &  &  &  \\\\
 Advisor  & \\textsc{M. Sc. Tobias Zeimetz}          &  &  &  \\\\
          &                                &  &  &
 \\end{tabular}
-\\end{table}}\n"
+\\end{table}\n"
+							   "\\end{center}"
                                "{\\normalsize Submitted on  %D\;  by: \\par}\n"
 							   "\\vspace{20pt}\n"
 							   "{\\normalsize \\scshape %a\\par}\n"
@@ -956,3 +961,19 @@ Advisor  & \\textsc{M. Sc. Tobias Zeimetz}          &  &  &  \\\\
 							   "{\\normalsize Matr.-Nr. 1184921\\par}\n"
                                "\\clearpage\n"
                                "}"))
+(use-package org-pomodoro
+  :straight t
+  :bind ([f7] . org-pomodoro)
+  :custom
+  (org-pomodoro-length 25)
+  (org-pomodoro-start-sound-p t)
+  (org-pomodoro-ticking-sound-p nil)
+  (org-pomodoro-ticking-sound-states '(:pomodoro))
+  (org-pomodoro-ticking-frequency 1)
+  (org-pomodoro-keep-killed-pomodoro-time t)
+  (org-pomodoro-start-sound "~/.emacs.d/bell.wav")
+  (org-pomodoro-finished-sound "~/.emacs.d/bell.wav")
+  (org-pomodoro-short-break-length 5)
+  :config
+  (setq alert-default-style 'libnotify)
+  (add-hook 'org-clock-out-hook (lambda () (org-save-all-org-buffers))))
