@@ -28,6 +28,8 @@
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
+(delete-selection-mode 1)
+(global-unset-key (kbd "C-z"))
 (make-directory "~/.emacs_backups/" t)
 (make-directory "~/.emacs_autosave/" t)
 (setq auto-save-file-name-transforms '((".*" "~/.emacs_autosave/" t))
@@ -256,7 +258,14 @@
   (add-hook 'pdf-view-mode-hook (lambda ()
                                   (progn
                                     (pdf-view-themed-minor-mode)
-                                    (pdf-view-fit-page-to-window)))))
+                                    (pdf-view-fit-page-to-window))))
+  :config
+  ;; open pdfs scaled to fit page
+  (setq-default pdf-view-display-size 'fit-page)
+  ;; automatically annotate highlights
+  (setq pdf-annot-activate-created-annotations t)
+  ;; use normal isearch
+  (define-key pdf-view-mode-map (kbd "C-s") 'isearch-forward))
 ;; htmlize
 (use-package htmlize
   :straight t)
@@ -676,9 +685,9 @@
              \\fancyhead[EC]{\\rightmark}
              \\fancyhead[OC]{\\leftmark}
              \\fancyfoot[C]{\\thepage}
-             \\newcommand{\\shorttoc}{\\setcounter{tocdepth}{0}\\renewcommand{\\contentsname}{Overview}\\tableofcontents}
+             \\newcommand{\\shorttoc}{\\setcounter{tocdepth}{0}\\renewcommand{\\contentsname}{Overview}\\tableofcontents\\thispagestyle{empty}}
              \\newcommand{\\longtoc}{\\setcounter{tocdepth}{2}\\renewcommand{\\contentsname}{Detailed
-             Overview}\\tableofcontents}
+             Overview}\\tableofcontents\\thispagestyle{empty}}
              \\aliaspagestyle{chapter}{empty}
              \\renewcommand{\\partnumberlinebox}[2]{#2 }
              \\renewcommand{\\chapternumberlinebox}[2]{#2 }
