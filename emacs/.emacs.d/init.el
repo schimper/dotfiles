@@ -43,7 +43,8 @@
 	  frame-inhibit-implied-resize t
 	  pixel-scroll-precision-mode t
 	  show-trailing-whitespace t
-	  auto-window-vscroll nil)
+	  auto-window-vscroll nil
+	  custom-file "~/.emacs.d/custom")
 (setq-default tab-width 4)
 (setq-default standard-indent 4)
 (setq c-basic-offset tab-width)
@@ -986,3 +987,4 @@ Advisor  & \\textsc{M. Sc. Tobias Zeimetz}          &  &  &  \\\\
   :config
   (setq alert-default-style 'libnotify)
   (add-hook 'org-clock-out-hook (lambda () (org-save-all-org-buffers))))
+

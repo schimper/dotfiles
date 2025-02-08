@@ -94,9 +94,9 @@ alias ec='emacsclient  -c'
 alias et='emacsclient -t'
 alias eck='pkill emacs'
 alias upd='doas eix-sync; doas emerge -uUD @world'
+alias bn='mpv ~/Music/Subliminals/playlist.m3u'
 MANPAGER="less -R --use-color -Dd+r -Du+b"
 complete -F _command doas
-export LESS="NIFRSX"
 
 if command -v source-highlight &> /dev/null; then
     # `source-highlight` ist installiert, Konfiguration aktivieren
